@@ -30,16 +30,7 @@ window.dbItems = {
         descripcion: "Mineral más básico de la mina.",
         tipo: "material" 
     },
-        adminkey: {
-        nombre: "Llave de Admin",
-        descripcion: "Permite abrir el menú de desarrollo.",
-        tipo: "control",
-        efecto: () => {
-            abrirMenuAdmin();
-        }
-    }
-};
-
+        
 window.dbEnemigos = {
     slimo_oscuro: {
         nombre: "Slime Corrompido",
