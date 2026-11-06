@@ -6,7 +6,7 @@
 function inventarioInicial() {
     return [
         { id: "pico_hierro", nombre: "Pico de Hierro", cantidad: 1 },
-        { id: "adminkey", nombre: "Llave de Admin", cantidad: 1 },
+      /*  { id: "adminkey", nombre: "Llave de Admin", cantidad: 1 }, */
     ];
 }
 
