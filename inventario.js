@@ -6,7 +6,7 @@
 function inventarioInicial() {
     return [
         { id: "pico_hierro", nombre: "Pico de Hierro", cantidad: 1 },
-      /*  { id: "adminkey", nombre: "Llave de Admin", cantidad: 1 }, */
+        { id: "adminkey", nombre: "Llave de Admin", cantidad: 1 },
     ];
 }
 
@@ -57,7 +57,6 @@ function tieneItem(idItem, cantidad = 1) {
     return !!item && item.cantidad >= cantidad;
 }
 
-
 function abrirPantallaInventario() {
     const textoHistoria = document.getElementById("texto-historia");
     const contenedorBotones = document.querySelector(".opciones-container");
@@ -84,6 +83,8 @@ function abrirPantallaInventario() {
             const descripcion = infoDb.descripcion || "Sin descripción.";
             const tieneEfecto = typeof infoDb.efecto === "function";
 
+            const esEquipamiento = infoDb.tipo === "equipamiento";
+
             HTMLObjetos += `
                 <div class="slot-objeto" style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 10px; background: #0f172a; border: 1px solid #c9a050; border-radius: 6px; width: 100%;">
                     <div style="display: flex; justify-content: space-between; width: 100%;">
@@ -91,9 +92,13 @@ function abrirPantallaInventario() {
                         <span class="cantidad-item" style="color: #38bdf8;">x${item.cantidad}</span>
                     </div>
                     <p style="font-size: 11px; color: #94a3b8; margin: 2px 0 5px 0; text-align: left;">${descripcion}</p>
+                    ${esEquipamiento && textoBonus(infoDb) ? `<p style="font-size: 11px; color: #38bdf8; margin: 0 0 5px 0;">${textoBonus(infoDb)}</p>` : ""}
             `;
 
-            if (tieneEfecto) {
+            // Lógica de botones unificada y segura
+            if (esEquipamiento) {
+                HTMLObjetos += `<button onclick="equiparItem('${item.id}'); abrirPantallaInventario();" class="boton-opcion" style="padding: 4px 10px; font-size: 11px; align-self: flex-end; margin-top: 5px; background: #0284c7;">Equipar</button>`;
+            } else if (tieneEfecto) {
                 HTMLObjetos += `<button onclick="usarItemInventario('${item.id}')" class="boton-opcion" style="padding: 4px 10px; font-size: 11px; align-self: flex-end; margin-top: 5px;">Usar</button>`;
             }
 

@@ -5,7 +5,10 @@ window.jugador = {
     exp: 0,
     expSiguienteNivel: 100,
     oro: 20,
-    puntosDisponibles: 0, // 👈 Puntos libres para repartir
+    puntosDisponibles: 0, 
+    equipo: {
+        arma: null
+    },
     stats: {
         vida: 50,
         vidaMax: 50,
@@ -58,7 +61,8 @@ function abrirPantallaStats() {
         : `<p style="color: #94a3b8; font-size: 12px; margin-bottom: 10px;">Sin puntos por repartir</p>`;
 
     pantallaInv.innerHTML = `
-        <h2 style='color: #f3e5ab; margin-bottom: 5px;'>🛡️ HOJA DE PERSONAJE</h2>
+        <h2 style='color: #f3e5ab; margin-bottom: 5px;'>📊 ESTADO</h2>
+        ${typeof htmlPestanasPersonaje === "function" ? htmlPestanasPersonaje("estado") : ""}
         ${avisoPuntos}
     `;
 

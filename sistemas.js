@@ -9,9 +9,9 @@ function ganarExperiencia(cantidad) {
         nivelesSubidos++;
         
         // Cada nivel otorga 3 puntos de stats gratuitos (puedes cambiar el número si prefieres 1 o 5)
-        window.jugador.puntosDisponibles += 1; 
+        window.jugador.puntosDisponibles += 3; 
         
-        window.jugador.expSiguienteNivel = Math.floor(window.jugador.expSiguienteNivel * 1.5);
+        window.jugador.expSiguienteNivel = Math.floor(window.jugador.expSiguienteNivel * 2);
         
         // Al subir de nivel se cura por completo
         window.jugador.stats.vida = window.jugador.stats.vidaMax; 

@@ -50,7 +50,7 @@ function cargarPartidaGuardada() {
 }
 
 // Iniciar una nueva partida limpia
-function nuevaPartida() {
+function nuevaPartida(datos = {}) {
     window.jugador = {
         nombre: "Julliet",
         nivel: 0,
@@ -58,6 +58,7 @@ function nuevaPartida() {
         expSiguienteNivel: 100,
         oro: 20,
         puntosDisponibles: 0,
+        equipo: { arma: null },
         stats: {
             vida: 50,
             vidaMax: 50,
@@ -68,6 +69,9 @@ function nuevaPartida() {
         }
     };
     
+    // Datos elegidos en la creación de personaje (nombre, y lo que se añada a futuro)
+    Object.assign(window.jugador, datos);
+
     // 👈 Inventario inicial completo para una nueva partida
     inventario = inventarioInicial();
     window.exploroZonaOculta = false;
@@ -145,7 +149,7 @@ function cargarEscena(nombreEscena) {
             if (opcion.accion) {
                 opcion.accion(); 
             }
-            cargarEscena(opcion.destino);
+            if (opcion.destino) cargarEscena(opcion.destino);
         };
 
         contenedorBotones.appendChild(nuevoBoton);

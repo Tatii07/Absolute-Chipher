@@ -67,6 +67,14 @@ function turnoAtacar() {
     const recompensaXP = enemigo.expRecompensa || 20; 
     ganarExperiencia(recompensaXP); 
     
+    if (enemigo.itemRecompensa) {
+            ganarItem(enemigo.itemRecompensa, 1);
+            const infoItem = window.dbItems[enemigo.itemRecompensa];
+            const nombreItemDropeado = infoItem ? infoItem.nombre : "Objeto misterioso";
+            mostrarAviso(`🎁 ¡Has obtenido un objeto único: ${nombreItemDropeado}!`);
+        }
+        
+
     cerrarCombate();
     return;
 }
@@ -131,7 +139,7 @@ function abrirInventarioCombate() {
 
             // Si tiene efecto (ya sea poción o llave de admin), dibujamos el botón de usar
             if (tieneEfecto) {
-                HTMLObjetos += `<button onclick="usarItemInventario('${item.id}')" class="boton-opcion" style="padding: 4px 10px; font-size: 11px; align-self: flex-end; margin-top: 5px;">Usar</button>`;
+                HTMLObjetos += `<button onclick="usarItemCombate('${item.id}')" class="boton-opcion" style="padding: 4px 10px; font-size: 11px; align-self: flex-end; margin-top: 5px;">Usar</button>`;
             }
 
             HTMLObjetos += `</div>`;
@@ -169,29 +177,27 @@ function cerrarCombate() {
     if (botonMochila) botonMochila.style.display = "block";
     if (botonStats) botonStats.style.display = "block";
     actualizarHUD();
-    
-    function usarItemCombate(idItem) {
-    const infoDb = window.dbItems[idItem];
-    if (!infoDb) return;
-
-    // Si es un ítem de control/admin en pleno combate, ejecutamos su efecto
-    if (infoDb.tipo === "control") {
-        if (infoDb.efecto) infoDb.efecto();
-        return;
-    }
-
-    // Gastamos el objeto del inventario global
-    const sePudoGastar = gastarItem(idItem, 1);
-
-    if (sePudoGastar) {
-        if (infoDb.efecto) infoDb.efecto();
-        actualizarHUD();
-        // Recargamos la mochila de combate para ver la cantidad actualizada
-        abrirInventarioCombate();
-    } else {
-        mostrarAviso("No tienes suficientes unidades de este objeto.");
-    }
-}
 }
 
+function usarItemCombate(idItem) {
+const infoDb = window.dbItems[idItem];
+if (!infoDb) return;
 
+// Si es un ítem de control/admin en pleno combate, ejecutamos su efecto
+if (infoDb.tipo === "control") {
+    if (infoDb.efecto) infoDb.efecto();
+    return;
+}
+
+// Gastamos el objeto del inventario global
+const sePudoGastar = gastarItem(idItem, 1);
+
+if (sePudoGastar) {
+    if (infoDb.efecto) infoDb.efecto();
+    actualizarHUD();
+    // Recargamos la mochila de combate para ver la cantidad actualizada
+    abrirInventarioCombate();
+} else {
+    mostrarAviso("No tienes suficientes unidades de este objeto.");
+}
+}

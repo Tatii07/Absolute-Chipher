@@ -52,6 +52,22 @@ function abrirMenuAdmin() {
         `;
     }
 
+    // --- SECCIÓN NUEVA: CONTROL DE NIVEL Y PODER ---
+    htmlAdmin += `<h3 style='color: #f3e5ab; font-size: 13px; margin: 10px 0 5px 0;'>Prueba de Nivel y Poder:</h3>`;
+    
+    htmlAdmin += `
+        <div class="slot-objeto" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px;">
+            <span style="font-size: 12px;">Nivel Actual: ${window.jugador.nivel}</span>
+            <button onclick="window.jugador.nivel++; window.jugador.puntosDisponibles += 3; actualizarHUD(); mostrarAviso('¡Subiste al Nivel ' + window.jugador.nivel + '!'); abrirMenuAdmin();" class="boton-opcion" style="padding: 2px 8px; font-size: 11px; background: #0284c7;">Subir +1 Nivel</button>
+        </div>
+        
+        <div class="slot-objeto" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px;">
+            <span style="font-size: 12px;">Otorgar +5 Puntos Stats</span>
+            <button onclick="window.jugador.puntosDisponibles += 5; mostrarAviso('¡Añadidos 5 puntos libres!'); abrirMenuAdmin();" class="boton-opcion" style="padding: 2px 8px; font-size: 11px; background: #0d9488;">+5 Puntos</button>
+        </div>
+    `;
+
+
     htmlAdmin += `</div>`;
     pantallaInv.innerHTML += htmlAdmin;
 
