@@ -5,8 +5,8 @@ window.escenas.menu = {
     opciones: [
         { 
             texto: "Nueva Partida", 
-            destino: "zona_minera", 
-            accion: () => { nuevaPartida(); } 
+            destino: "", // no cambia de escena: abre la creación de personaje
+            accion: () => { abrirCreacionPersonaje(); } 
         },
         { 
             texto: "Continuar Partida", 

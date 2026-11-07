@@ -78,3 +78,12 @@ window.escenas.oculto = {
         }
     ]
 };
+
+window.escenas.camino1 = {
+    texto: "Continúas avanzado por la mina mientras sientes el suelo de piedra a tus pies, de repente te topas con un guardia \n—¿Que haces aqui?, Ve a trabajar",
+    opciones: [
+        {
+            texto: "Atacarlo e intentar robar su arma"
+        }
+    ]
+}
