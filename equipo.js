@@ -8,7 +8,7 @@
 // PARA CREAR UN OBJETO EQUIPABLE (en base_datos.js):
 //   mi_casco: { nombre: "...", descripcion: "...", tipo: "equipamiento",
 //               slot: "casco", bonus: { vitalidad: 2, vidaMax: 10 } }
-//   Bonus posibles: fuerza, agilidad, inteligencia, vitalidad, vidaMax
+//   Bonus posibles: fuerza, agilidad, inteligencia, vitalidad, defensa, vidaMax
 
 const SLOTS_EQUIPO = [
     { id: "arma",       nombre: "Arma",        icono: "⚔️", tipo: "arma" },
@@ -27,6 +27,7 @@ const NOMBRES_STAT = {
     agilidad: "💨 Agilidad",
     inteligencia: "🧠 Inteligencia",
     vitalidad: "❤️ Vitalidad",
+    defensa: "🛡️ Defensa",
     vidaMax: "💗 Vida máx."
 };
 
@@ -155,11 +156,15 @@ function cerrarPantallaPersonaje() {
 
 // Pestañas "Estado | Equipo" (las usan la Hoja de Personaje y la pantalla de Equipo)
 function htmlPestanasPersonaje(activa) {
-    const estilo = id => `width: 44%; max-width: 130px; padding: 6px 8px; font-size: 12px; background: ${id === activa ? "#0284c7" : "#1e293b"};`;
+    const estilo = id => `flex: 1 1 auto; width: auto; max-width: none; padding: 6px 8px; font-size: 11px; letter-spacing: 0; white-space: nowrap; background: ${id === activa ? "#0284c7" : "#1e293b"};`;
+    const marcaClase = (typeof hayClaseDisponible === "function" && hayClaseDisponible()) ? " ❗" : "";
+    const marcaHab = (typeof hayHabilidadDisponible === "function" && hayHabilidadDisponible()) ? " ❗" : "";
     return `
-        <div style="display: flex; gap: 8px; justify-content: center; margin: 8px 0;">
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 8px 0;">
             <button onclick="abrirPantallaStats()" class="boton-opcion" style="${estilo("estado")}">📊 Estado</button>
             <button onclick="abrirPantallaEquipo()" class="boton-opcion" style="${estilo("equipo")}">🛡️ Equipo</button>
+            <button onclick="abrirPantallaClase()" class="boton-opcion" style="${estilo("clase")}">⚜️ Clase${marcaClase}</button>
+            <button onclick="abrirPantallaHabilidades()" class="boton-opcion" style="${estilo("habilidades")}">✨ Habilidades${marcaHab}</button>
         </div>`;
 }
 

@@ -1,6 +1,11 @@
 // sistemas.js
 function ganarExperiencia(cantidad) {
-    window.jugador.exp += Number(cantidad);
+    // Rasgos de raza/especialidad que modifican la experiencia ganada
+    let ganada = Number(cantidad);
+    if (typeof multiplicadorEfecto === "function") {
+        ganada = Math.round(ganada * multiplicadorEfecto("expMultiplicador"));
+    }
+    window.jugador.exp += ganada;
     let nivelesSubidos = 0;
 
     while (window.jugador.exp >= window.jugador.expSiguienteNivel) {
@@ -15,6 +20,7 @@ function ganarExperiencia(cantidad) {
         
         // Al subir de nivel se cura por completo
         window.jugador.stats.vida = window.jugador.stats.vidaMax; 
+        window.jugador.stats.mana = window.jugador.stats.manaMax; // y el maná
     }
     
     if (nivelesSubidos > 0 && typeof mostrarAviso === "function") {
@@ -40,6 +46,7 @@ function usarItemInventario(idItem) {
     const sePudoGastar = gastarItem(idItem, 1);
 
     if (sePudoGastar) {
+        registrarAccion("objetosUsados"); // 🆕 CLASES
         if (infoDb.efecto) infoDb.efecto();
         actualizarHUD();
         abrirPantallaInventario();

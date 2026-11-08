@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Por Decidir</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="juego.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tema.css">
+    <link rel="stylesheet" href="arbol_habilidades.css">
 </head>
 <body class="modo-menu">
 
@@ -13,23 +16,35 @@
     <div id="game-container">
 
 <!-- VENTANA MODAL PERSONALIZADA -->
-<div id="modal-aviso" class="oculto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 100;">
-    <div style="background: #0f172a; border: 2px solid #c9a050; padding: 20px; border-radius: 10px; width: 80%; max-width: 280px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.8);">
-        <p id="modal-texto" style="color: #f8fafc; font-size: 14px; margin-bottom: 20px; font-family: 'Cinzel', serif;"></p>
-        <button onclick="cerrarModal()" class="boton-opcion" style="width: 100%;">Aceptar</button>
+<div id="modal-aviso" class="modal-fondo oculto">
+    <div class="modal-caja">
+        <p id="modal-texto"></p>
+        <button onclick="cerrarModal()" class="boton-opcion boton-primario">Aceptar</button>
     </div>
 </div>
-
-<button id="btn-menu-fijo" onclick="abrirMenuOpciones()" class="boton-opcion oculto" style="position: fixed; top: 10px; right: 10px; z-index: 100; padding: 6px 12px; font-size: 12px; background: #1e293b; border-color: #475569;">⚙️ Menú</button>
-
-
 
         <!-- 1. CAJA SUPERIOR: HUD / Estado del jugador -->
         <header id="caja-hud" class="caja-ui oculto">
             <div class="hud-superior">
-                <span>Nivel: <span id="ui-nivel">1</span></span>
-                <span>HP: <span id="ui-hp">50</span>/<span id="ui-hp-max">50</span></span>
-                <span>🪙 <span id="ui-oro">0</span></span>
+                <div class="hud-celda">
+                    <span class="hud-etiqueta">Nivel</span>
+                    <span id="ui-nivel">1</span>
+                </div>
+                <div class="hud-celda hud-vida">
+                    <span class="hud-etiqueta">Vida</span>
+                    <span><span id="ui-hp">50</span> / <span id="ui-hp-max">50</span></span>
+                    <div class="barra"><div id="ui-hp-barra" class="barra-relleno"></div></div>
+                </div>
+                <div class="hud-celda hud-mana">
+                    <span class="hud-etiqueta">Maná</span>
+                    <span><span id="ui-mp">40</span> / <span id="ui-mp-max">40</span></span>
+                    <div class="barra barra-mana"><div id="ui-mp-barra" class="barra-relleno"></div></div>
+                </div>
+                <div class="hud-celda">
+                    <span class="hud-etiqueta">Oro</span>
+                    <span>🪙 <span id="ui-oro">0</span></span>
+                </div>
+                <button id="btn-menu-fijo" onclick="abrirMenuOpciones()" class="boton-opcion boton-hud oculto">⚙️ Menú</button>
             </div>
         </header>
 
@@ -37,10 +52,10 @@
         <main id="caja-narrativa" class="caja-ui">
             
             <!-- Bloque exclusivo del Menú Principal -->
-            <div id="bloque-menu-inicio" style="text-align: center; width: 100%;">
-                <div id="menu-inicio" style="font-size: 24px; color: #f3e5ab; font-weight: bold; margin-bottom: 8px;">Por Decidir</div>
-                <p class="subtitulo" style="color: #94a3b8; font-style: italic; margin-bottom: 15px;">No Se</p>
-                <p id="version" style="font-size: 12px; color: #64748b; margin-bottom: 20px;">Versión De Prueba 0.0</p>
+            <div id="bloque-menu-inicio">
+                <h1 id="menu-inicio" class="titulo-juego">Por Decidir</h1>
+                <p class="subtitulo">No Se</p>
+                <p id="version">Versión de prueba 0.0</p>
             </div>
 
             <!-- Texto de la Historia (Dinámico para el juego) -->
@@ -59,6 +74,11 @@
                 <button id="btn-stats-fijo" class="oculto btn-accion-extra" onclick="abrirPantallaStats()">📊 Personaje</button>
             </div>
         </footer>
+        
+<audio id="musica-fondo" loop>
+    <source src="audio/menu_principal.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+</audio>
 
 
     </div>
@@ -68,13 +88,26 @@
 <script src="ubicaciónes/menu.js"></script>
 <script src="ubicaciónes/mina.js"></script>
 
-
+    <!--Base De Datos -->    
+<script src="base_datos/Items.js"></script>
+<script src="base_datos/equipamiento.js"></script>
+<script src="base_datos/enemigos.js"></script>
+<script src="base_datos/rasgos.js"></script>
+<script src="base_datos/razas.js"></script>
+<script src="base_datos/clases.js"></script>
+<script src="base_datos/habilidades.js"></script>
+          <script>
+    window.dbItems = Object.assign({}, window.dbConsumibles, window.dbEquipamiento);
+</script>
+    
     <!-- SCRIPTS -->
     <script src="compañeros.js"></script>
     <script src="jugador.js"></script>
     <script src="inventario.js"></script> 
     <script src="equipo.js"></script>
-    <script src="base_datos.js"></script>
+    <script src="sistema_razas.js"></script>
+    <script src="sistema_clases.js"></script>
+    <script src="sistema_habilidades.js"></script>
     <script src="sistemas.js"></script>
     <script src="misiones.js"></script>
     <script src="ui.js"></script> 
@@ -82,5 +115,6 @@
     <script src="admin.js"></script>
     <script src="combate.js"></script>
     <script src="creacion.js"></script>
+    <script src="audio.js"></script>
 </body>
 </html>

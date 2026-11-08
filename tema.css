@@ -1,0 +1,541 @@
+/* ==========================================================
+   tema.css — "Mina y brasa"
+   Reemplaza a style.css y juego.css (un solo archivo).
+
+   Reglas del diseño:
+   - Todo recto: ni un border-radius.
+   - Todo plano: sin degradados, sin transparencias, sin blur.
+   - Sombras duras (sin desenfoque) y marcos de doble línea.
+   - La brasa (naranja) solo aparece donde hay que actuar:
+     opción bajo el dedo, botón principal, pestaña activa.
+
+   Nota: varios .js dibujan estilos en línea (style="...").
+   Por eso algunas reglas usan !important y selectores
+   [style*="..."]: así se re-colorean sin tocar esos archivos.
+   ========================================================== */
+
+:root {
+    --carbon: #15110d;        /* fondo de página */
+    --hierro: #221c16;        /* paneles */
+    --hierro-alto: #2e261d;   /* casillas y botones */
+    --cuero: #5b4833;         /* líneas secundarias */
+    --laton: #b58f3e;         /* marco principal */
+    --laton-oscuro: #6f5826;  /* línea interior del marco */
+    --oro-claro: #e6c978;     /* títulos */
+    --pergamino: #ecdfc0;     /* texto principal */
+    --ceniza: #a89c82;        /* texto secundario */
+    --ceniza-baja: #968a70;   /* texto de apoyo */
+    --brasa: #e08a2e;         /* acento: acción */
+    --brasa-clara: #f0a24f;
+    --sangre: #b23a26;
+    --sangre-oscura: #5e1d12;
+    --sangre-clara: #e0624c;
+    --musgo: #8aa65a;
+    --arcano: #a995e0;
+    --arcano-oscuro: #2b2340;
+    --sombra: #0b0906;
+
+    --f-titulo: 'IM Fell English SC', Georgia, 'Times New Roman', serif;
+    --f-cuerpo: 'Alegreya', Georgia, 'Times New Roman', serif;
+}
+
+/* ---------- Base ---------- */
+
+html { background: var(--carbon); }
+
+body.modo-menu,
+body.modo-juego {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--carbon);
+    color: var(--pergamino);
+    font-family: var(--f-cuerpo);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body.modo-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-container *,
+#game-container *::before,
+#game-container *::after {
+    border-radius: 0 !important;
+    box-sizing: border-box;
+}
+
+/* Textos que los .js dibujan con la fuente Cinzel en línea */
+[style*="Cinzel"] { font-family: var(--f-cuerpo) !important; }
+
+.oculto { display: none !important; }
+
+:focus-visible { outline: 2px solid var(--brasa); outline-offset: 2px; }
+
+/* ==========================================================
+   MENÚ PRINCIPAL: una sola placa con título y lista
+   ========================================================== */
+
+body.modo-menu #game-container {
+    position: relative;
+    width: min(360px, 92vw);
+    padding: 34px 28px 22px;
+    background: var(--hierro);
+    border: 2px solid var(--laton);
+    outline: 1px solid var(--laton-oscuro);
+    outline-offset: -7px;
+    box-shadow: 7px 7px 0 var(--sombra);
+    animation: entrar 0.45s ease-out;
+}
+
+@keyframes entrar {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* En el menú, los cajones del juego no llevan marco propio */
+body.modo-menu .caja-ui {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+#bloque-menu-inicio { text-align: left; width: 100%; }
+
+.titulo-juego {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--laton);
+    font-family: var(--f-titulo);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.1;
+    color: var(--oro-claro);
+}
+
+.subtitulo {
+    margin: 10px 0 4px;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ceniza);
+}
+
+#version {
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: var(--ceniza-baja);
+}
+
+/* ==========================================================
+   DENTRO DEL JUEGO: HUD arriba, historia en medio, acciones abajo
+   ========================================================== */
+
+body.modo-juego #game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 94vw;
+    max-width: 640px;
+    height: 90vh;
+    height: 90dvh;
+    margin: 5vh auto;
+    padding: 0;
+}
+
+.caja-ui {
+    background: var(--hierro);
+    border: 2px solid var(--cuero);
+    padding: 10px 12px;
+}
+
+/* La historia es lo importante: lleva el marco de latón */
+body.modo-juego #caja-narrativa {
+    border-color: var(--laton);
+    outline: 1px solid var(--laton-oscuro);
+    outline-offset: -6px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 16px;
+}
+
+body.modo-juego #caja-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 12px 12px;
+}
+
+/* ---------- HUD ---------- */
+
+.hud-superior {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+}
+
+.hud-celda {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding-left: 10px;
+    border-left: 2px solid var(--laton);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.hud-celda:first-child { padding-left: 0; border-left: 0; }
+
+.hud-vida { flex: 1; min-width: 0; }
+.hud-mana { flex: 1; min-width: 0; }
+
+.hud-etiqueta {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ceniza);
+}
+
+.barra {
+    width: 100%;
+    height: 8px;
+    margin-top: 3px;
+    background: var(--carbon);
+    border: 1px solid var(--cuero);
+}
+
+.barra-relleno {
+    height: 100%;
+    width: 100%;
+    background: var(--sangre);
+    transition: width 0.25s ease-out;
+}
+
+.barra-relleno.critica { background: var(--sangre-clara); }
+
+/* Barra de maná */
+.barra-mana .barra-relleno { background: #3b82f6; }
+
+.boton-hud { align-self: center; padding: 6px 10px !important; font-size: 13px !important; }
+
+/* ---------- Texto de la historia ---------- */
+
+body.modo-juego #texto-historia {
+    width: 100%;
+    margin: 0;
+    padding: 2px 0 2px 14px;
+    background: transparent;
+    border-left: 3px solid var(--brasa);
+    color: var(--pergamino);
+    font-size: 18px;
+    line-height: 1.65;
+    text-align: left;
+}
+
+/* Pantallas de mochila, personaje, equipo, opciones y creación */
+#pantalla-inventario { width: 100%; text-align: center; }
+
+#pantalla-inventario h2 {
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--laton);
+    font-family: var(--f-titulo);
+    font-weight: 400;
+    font-size: 24px;
+    text-align: left;
+    color: var(--oro-claro);
+}
+
+/* ==========================================================
+   BOTONES
+   ========================================================== */
+
+/* Placa de hierro: botones sueltos, pestañas, acciones dentro de pantallas */
+.boton-opcion,
+.btn-accion-extra,
+#btn-mochila-fijo {
+    padding: 10px 14px;
+    background: var(--hierro-alto) !important;
+    color: var(--pergamino);
+    border: 2px solid var(--cuero) !important;
+    box-shadow: 0 3px 0 var(--sombra);
+    font-family: var(--f-titulo);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.btn-accion-extra,
+#btn-mochila-fijo { flex: 1; width: auto; max-width: none; }
+
+.boton-opcion:hover,
+.btn-accion-extra:hover,
+#btn-mochila-fijo:hover {
+    background: var(--brasa) !important;
+    border-color: var(--brasa) !important;
+    color: var(--carbon);
+}
+
+.boton-opcion:active,
+.btn-accion-extra:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--sombra);
+}
+
+/* Botón principal (también el azul de antes) */
+.boton-primario,
+.boton-opcion[style*="#0284c7"] {
+    background: var(--brasa) !important;
+    border-color: var(--brasa) !important;
+    color: var(--carbon);
+}
+.boton-primario:hover,
+.boton-opcion[style*="#0284c7"]:hover {
+    background: var(--brasa-clara) !important;
+    border-color: var(--brasa-clara) !important;
+}
+
+/* Botón de peligro (atacar, salir al menú) */
+.boton-opcion[style*="#7f1d1d"] {
+    background: var(--sangre-oscura) !important;
+    border-color: var(--sangre) !important;
+}
+.boton-opcion[style*="#7f1d1d"]:hover {
+    background: var(--sangre) !important;
+    border-color: var(--sangre-clara) !important;
+    color: var(--pergamino);
+}
+
+/* Habilidades de raza/especialidad */
+.boton-opcion[style*="#4c1d95"] {
+    background: var(--arcano-oscuro) !important;
+    border-color: var(--arcano) !important;
+}
+.boton-opcion[style*="#4c1d95"]:hover {
+    background: var(--arcano) !important;
+    color: var(--carbon);
+}
+
+/* Lista de opciones de la escena: filas con la brasa como marcador */
+.opciones-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+}
+
+.opciones-container .boton-opcion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: none;
+    padding: 13px 10px;
+    background: var(--hierro) !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--cuero) !important;
+    box-shadow: none;
+    font-size: 18px;
+    text-align: left;
+}
+
+.opciones-container .boton-opcion::before {
+    content: "▸";
+    color: var(--brasa);
+}
+
+.opciones-container .boton-opcion:last-child { border-bottom: 0 !important; }
+
+.opciones-container .boton-opcion:hover {
+    background: var(--brasa) !important;
+    color: var(--carbon);
+}
+
+.opciones-container .boton-opcion:hover::before { color: var(--carbon); }
+
+.opciones-container .boton-opcion:active { transform: none; background: var(--brasa-clara) !important; }
+
+/* Botones dentro de las pantallas (compactos y legibles) */
+#pantalla-inventario .boton-opcion { font-family: var(--f-cuerpo); font-weight: 700; }
+
+#pantalla-inventario .slot-objeto .boton-opcion { width: auto; }
+
+#pantalla-inventario > .boton-opcion {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ==========================================================
+   CASILLAS: objetos, stats, equipo
+   ========================================================== */
+
+.grid-inventario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+    margin: 10px auto;
+}
+
+.slot-objeto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--hierro-alto) !important;
+    border: 1px solid var(--cuero) !important;
+    border-left: 4px solid var(--laton) !important;
+    color: var(--pergamino);
+    font-size: 16px;
+    text-align: left;
+}
+
+.slot-objeto[style*="#38bdf8"] { border-left-color: var(--brasa) !important; }   /* equipado */
+.slot-objeto[style*="#ef4444"] { border-left-color: var(--sangre) !important; }  /* enemigo */
+
+.nombre-item { font-weight: 700; color: var(--oro-claro); }
+
+.cantidad-item {
+    padding: 1px 8px;
+    background: var(--carbon);
+    border: 1px solid var(--laton-oscuro);
+    color: var(--brasa);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Tarjetas de la creación de personaje (raza, especialidad) */
+#pantalla-inventario div[onclick][style*="cursor: pointer"] {
+    background: var(--hierro-alto) !important;
+    border: 2px solid var(--cuero) !important;
+    text-align: left;
+}
+#pantalla-inventario div[onclick][style*="#c9a050"] {
+    border-color: var(--laton) !important;
+    border-left: 6px solid var(--brasa) !important;
+}
+
+/* Campo de texto */
+#game-container input[type="text"] {
+    background: var(--carbon) !important;
+    border: 2px solid var(--laton) !important;
+    color: var(--pergamino) !important;
+    font-family: var(--f-cuerpo) !important;
+    font-size: 17px !important;
+    text-align: left !important;
+    padding: 10px 12px !important;
+}
+#game-container input[type="text"]:focus { border-color: var(--brasa) !important; outline: 0; }
+
+/* ==========================================================
+   RE-COLOREADO DE ESTILOS EN LÍNEA (los que dibujan los .js)
+   ========================================================== */
+
+h2[style*="color: #f3e5ab"], span[style*="color: #f3e5ab"], p[style*="color: #f3e5ab"] { color: var(--oro-claro) !important; }
+h2[style*="color: #ef4444"], span[style*="color: #ef4444"] { color: var(--sangre-clara) !important; }
+span[style*="color: #38bdf8"], p[style*="color: #38bdf8"] { color: var(--brasa) !important; }
+span[style*="color: #94a3b8"], p[style*="color: #94a3b8"], label[style*="color: #94a3b8"] { color: var(--ceniza) !important; }
+p[style*="color: #64748b"] { color: var(--ceniza-baja) !important; }
+p[style*="color: #86efac"] { color: var(--musgo) !important; }
+p[style*="color: #c4b5fd"] { color: var(--arcano) !important; }
+div[style*="border-top: 1px solid #334155"] { border-top-color: var(--cuero) !important; }
+
+/* ==========================================================
+   AVISO (ventana modal)
+   El fondo es transparente del todo: solo bloquea los toques.
+   ========================================================== */
+
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+}
+
+.modal-caja {
+    width: min(300px, 84vw);
+    padding: 22px 20px 18px;
+    background: var(--hierro);
+    border: 2px solid var(--laton);
+    outline: 1px solid var(--laton-oscuro);
+    outline-offset: -6px;
+    box-shadow: 8px 8px 0 var(--sombra);
+}
+
+#modal-texto {
+    margin: 0 0 18px;
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--pergamino);
+    white-space: pre-line;
+}
+
+.modal-caja .boton-opcion { display: block; width: 100%; }
+
+/* ==========================================================
+   CLASES
+   ========================================================== */
+
+.clase-camino { margin: 6px 0 10px; font-size: 14px; color: var(--ceniza); }
+
+.clase-tarjeta {
+    padding: 12px;
+    margin-bottom: 10px;
+    background: var(--hierro-alto);
+    border: 1px solid var(--cuero);
+    border-left: 4px solid var(--cuero);
+    text-align: left;
+}
+.clase-tarjeta.lista   { border-left-color: var(--brasa); }
+.clase-tarjeta.actual  { border-left-color: var(--laton); }
+
+.clase-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.clase-tier { font-size: 13px; color: var(--ceniza); }
+.clase-desc { margin: 6px 0; font-size: 15px; }
+.clase-efectos { margin: 4px 0; font-size: 13px; color: var(--brasa); }
+
+.clase-lista, .clase-reqs { margin: 6px 0 0; padding: 0; list-style: none; font-size: 14px; }
+.clase-lista li { margin: 4px 0; color: var(--arcano); }
+.clase-reqs li { margin: 2px 0; }
+
+.clase-sub { margin: 12px 0 4px; font-size: 14px; color: var(--ceniza); text-align: left; }
+.clase-falta { margin: 8px 0 0; font-size: 13px; color: var(--ceniza-baja); }
+
+.req-ok { color: var(--musgo); }
+.req-falta { color: var(--ceniza); }
+
+.clase-puerta {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: var(--hierro-alto);
+    border: 1px solid var(--cuero);
+    border-left: 4px solid var(--sangre);
+    text-align: left;
+    font-size: 15px;
+}
+.clase-puerta.abierta { border-left-color: var(--musgo); }
+.clase-puerta p { margin: 0 0 6px; }
+
+/* ---------- Movimiento reducido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    #game-container, #game-container * { animation: none !important; transition: none !important; }
+}

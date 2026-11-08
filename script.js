@@ -65,7 +65,8 @@ function nuevaPartida(datos = {}) {
             fuerza: 15,
             agilidad: 2,
             inteligencia: 2,
-            vitalidad: 3
+            vitalidad: 3,
+            defensa: 0
         }
     };
     
@@ -74,6 +75,8 @@ function nuevaPartida(datos = {}) {
 
     // 👈 Inventario inicial completo para una nueva partida
     inventario = inventarioInicial();
+    // Bonus de la raza y la especialidad elegidas (stats, objetos, oro...)
+    if (typeof aplicarRazaYEspecialidad === "function") aplicarRazaYEspecialidad();
     window.exploroZonaOculta = false;
     window.exploroAlmacen = false;
 
@@ -89,6 +92,7 @@ function cargarEscena(nombreEscena) {
         if (typeof window.registrarVisita === "function") {
             window.registrarVisita(nombreEscena);
         }
+        if (typeof registrarLugar === "function") registrarLugar(nombreEscena); // 🆕 CLASES
     }
 
     const escenaActual = window.escenas ? window.escenas[nombreEscena] : null;
@@ -106,6 +110,7 @@ function cargarEscena(nombreEscena) {
 
     if (nombreEscena === "menu") {
         document.body.className = "modo-menu";
+        window.combateActual = null; // al salir al menú no queda ningún combate colgado
         
         // Ocultar HUD y botones flotantes en el menú principal
         if (bloqueMenuInicio) bloqueMenuInicio.style.display = "block";
@@ -150,6 +155,12 @@ function cargarEscena(nombreEscena) {
                 opcion.accion(); 
             }
             if (opcion.destino) cargarEscena(opcion.destino);
+
+            // Si la acción inició un combate, cargarEscena volvió a mostrar el texto de la escena:
+            // lo ocultamos otra vez para que solo se vea el combate
+            if (window.combateActual && typeof mostrarPantallaCombate === "function") {
+                mostrarPantallaCombate();
+            }
         };
 
         contenedorBotones.appendChild(nuevoBoton);
