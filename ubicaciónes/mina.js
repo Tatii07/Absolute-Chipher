@@ -10,6 +10,7 @@ window.escenas.zona_minera = {
             destino: "zona_minera",
             accion: () => {
                 ganarItem("carbon", 1);
+                registrarAccion("carbonPicado"); // 🆕 CLASES
                 actualizarHUD();
                 ganarExperiencia("1");
                 mostrarAviso("¡Has Obtenido 1 de carbon.");
@@ -83,7 +84,12 @@ window.escenas.camino1 = {
     texto: "Continúas avanzado por la mina mientras sientes el suelo de piedra a tus pies, de repente te topas con un guardia \n—¿Que haces aqui?, Ve a trabajar",
     opciones: [
         {
-            texto: "Atacarlo e intentar robar su arma"
-        }
+    texto: "Atacarlo e intentar robar su arma",
+    accion: () => {
+        iniciarCombate("lider_soldado");
+    },
+    destino: "zona_minera"
+}
+
     ]
 }

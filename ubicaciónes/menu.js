@@ -4,12 +4,12 @@ window.escenas.menu = {
     texto: "", 
     opciones: [
         { 
-            texto: "Nueva Partida", 
+            texto: "⚔️ Nueva Partida", 
             destino: "", // no cambia de escena: abre la creación de personaje
             accion: () => { abrirCreacionPersonaje(); } 
         },
         { 
-            texto: "Continuar Partida", 
+            texto: "📖 Continuar Partida", 
             destino: "", // Se definirá dinámicamente o cargará la guardada
             condicion: () => {
                 // Solo aparece si existe una partida guardada en el navegador
@@ -18,6 +18,7 @@ window.escenas.menu = {
             accion: () => {
                 cargarPartidaGuardada();
             }
+
         }
     ]
 };
