@@ -4,7 +4,7 @@
 // Por eso este archivo intenta sonar al cargar y, si lo bloquean, espera al primer toque/clic y suena.
 // Ya NO hace falta llamar reproducirMusicaMenu() desde menu.js: arranca solo.
 
-*const RUTA_MUSICA_MENU = "audio/menu_principal.mp3"; // debe coincidir con el <source> de index.html
+const RUTA_MUSICA_MENU = "audio/menu_principal.mp3"; // debe coincidir con el <source> de index.html
 let esperandoInteraccion = false;
 let avisoErrorMostrado = false;
 
