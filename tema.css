@@ -104,7 +104,32 @@ body.modo-menu .caja-ui {
     box-shadow: none;
 }
 
-#bloque-menu-inicio { text-align: left; width: 100%; }
+#bloque-menu-inicio {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 14px;
+    border-bottom: 2px solid var(--laton);
+}
+
+/* Logo del juego en el menú */
+.logo-juego {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin: -14px auto 0;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55));
+}
+
+/* El título sigue en el HTML (accesibilidad, buscadores) pero no se ve: ya lo dice el logo */
+.titulo-oculto {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0; border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
 
 .titulo-juego {
     margin: 0;
@@ -125,7 +150,7 @@ body.modo-menu .caja-ui {
 }
 
 #version {
-    margin: 0 0 22px;
+    margin: 0 0 12px;
     font-size: 13px;
     color: var(--ceniza-baja);
 }
